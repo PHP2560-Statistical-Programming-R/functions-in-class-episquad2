@@ -80,9 +80,23 @@ gamma.est <- function(the_data) {
 Write a function called `gamma.jackknife` that takes argument `a_vector` and returns jackknife standard error estimates on the gamma parameters. 
 
 ```{r, eval=FALSE }
+my_gamma_a=c()
+my_gamma_s=c()
 gamma.jackknife <- function(a_vector) {
+  for(i in 1:length(a_vector)){
+    n=length(a_vector)
   
-  return(jackknife.stderrs)
+    my_gamma_a[i] = gamma.est(a_vector[-i])["a"]
+     my_gamma_s[i] = gamma.est(a_vector[-i])["s"]
+    
+    
+  }
+  variance_a = (var(my_gamma_a))
+  variance_s = (var(my_gamma_s))
+  jackknife.stderr_a = ((n-1)^2/n*variance_a)^(1/2)
+  jackknife.stderr_s = ((n-1)^2/n*variance_s)^(1/2)
+  jackknife.stderr=c(jackknife.stderr_a,jackknife.stderr_s)
+  return(jackknife.stderr)
 }
 ```
 
@@ -105,6 +119,7 @@ Write a function called `jackknife.lm` that takes arguments `df`, `formula` and 
 
 ```{r, eval=FALSE}
 jackknife.lm <- function(df,formula,p) {
+  for(i in 1:length())
   
   return(jackknife.stderr)
 }
