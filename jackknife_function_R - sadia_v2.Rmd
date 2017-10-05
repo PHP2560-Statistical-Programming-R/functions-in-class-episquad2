@@ -127,17 +127,16 @@ Write a function called `jackknife.lm` that takes arguments `df`, `formula` and 
 
 jackknife.lm <- function(df,formula,p) {
   n<-nrow(df)
-  coeff<-matrix(NA, nrow=p,ncol=nrow(df))
+  coeff<-matrix(NA, nrow=n, ncol=p)
   
   for (i in 1:nrow(df)){
-    model<-lm(as.formula(formula), df[-i,])
-   coeff[,i]<-model$coefficients}
+   model<-lm(as.formula(formula), df[-i,])
+   coeff[i,]<-model$coefficients}
   
-  var.coeff<-apply(coeff, 1, var)
-   jackknife.stderr<-((n-1)^2/n*var.coeff)^(1/2)
+  var.coeff<-apply(coeff, 2, var) # 2 indicates go through the column and calculate the variance (to go through the rows use 1)
+  jackknife.stderr<-((n-1)^2/n*var.coeff)^(1/2)
   return(jackknife.stderr)
   }
-
 
 ```
 
